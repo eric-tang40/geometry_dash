@@ -12,6 +12,6 @@ Provide a hihg-level description of your project. Include explanatory links if y
 Explain what topics from this year you will be using in this project, and how they will be used.
 
 ## Libraries (optional)
-If you are using any processing libraries, list them and explain why you need them.
-
+Sound Library:
+- Beads by Ollie Bown
 
