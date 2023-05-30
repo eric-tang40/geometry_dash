@@ -4,7 +4,8 @@
 ### Class period: 5th
 
 ---
-
+Ideas:
+- Take a snapshot of yourself, and you become the png image on the block
 ## Project Description
 Provide a hihg-level description of your project. Include explanatory links if you think they will be helpful.
 
