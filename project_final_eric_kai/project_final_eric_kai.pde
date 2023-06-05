@@ -1,10 +1,6 @@
 
-//NOTE TO KAI:
-//If you want to run the program, go to draw and
-//either use c.run() or s.run()
-
-//Also I haven't figured out mouse commands for the ship
-//only space bar works for ship
+//Git Commands
+//Access Repo: cd ~/5_p02_final-kai-eric
 
 
 Cube c;
