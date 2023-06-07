@@ -14,8 +14,8 @@ class Block {
     bSize = size;
   }
   
-    void move() {
-      position.x = position.x - 3;
+  void move() {
+      position.x = position.x - screenVelocity;
   }
   
   

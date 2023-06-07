@@ -1,13 +1,11 @@
 class Cube extends Player {
 
   PShape c;
-  float ground;
   boolean canJump;
 
   Cube(int x, int y, float s) {
     super(x, y, s);
     c = create();
-    ground = position.y;
     canJump = true;
   }
 
@@ -48,7 +46,7 @@ class Cube extends Player {
     acceleration.mult(0);
 
     // if the object is on the ground
-    if (position.y == ground) {
+    if (position.y >= ground) {
       velocity.mult(0);
       canJump = true;
     }
@@ -70,10 +68,10 @@ class Cube extends Player {
   }
 
   boolean spikeCollisionCheck(Spike spike) {
-    float playerLeft = position.x - size/2;
-    float playerRight = position.x + size/2;
+    float playerLeft = position.x;
+    float playerRight = position.x + size;
 
-    float playerBottom = position.y + size/2;
+    float playerBottom = position.y + size;
 
     float spikeLeft = spike.position.x - spike.bSize/2;
     float spikeRight = spike.position.x + spike.bSize/2;
@@ -87,10 +85,31 @@ class Cube extends Player {
   }
 
   boolean surfCollisionCheck(Surface surf) {
-    if (this.position.x + size >= surf.position.x && this.position.x <= surf.position.x + surf.bSize && this.position.y + size < surf.position.y) {
-      return true;
-    } else {
-      return false;
+    for(int i=0; i<surf.bSize; i++) {
+      for(int j=0; j<this.size; j++) {
+        if(this.position.x + j == surf.position.x + i) {
+          return true;
+        }
+      }
     }
+    return false;
   }
+  
+  boolean surfDeathCheck(Surface surf) {
+    for(int i=0; i<surf.bSize; i++) {
+      for(int j=0; j<this.size; j++) {
+        if(this.position.x + size == surf.position.x) {
+          if(this.position.y + j == surf.position.y + i) {
+            return true;
+          }
+        }
+      }
+    }
+    return false;
+  }
+  
+  
+  
+  
+  
 }
