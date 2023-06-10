@@ -5,7 +5,7 @@ class Block {
   PVector acceleration;
   
   Block(int x, int y, float size) {
-    stroke(255);
+    stroke(225);
     strokeWeight(3);
     fill(0);
     position = new PVector(x,y);

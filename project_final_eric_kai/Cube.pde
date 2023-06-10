@@ -67,21 +67,27 @@ class Cube extends Player {
     acceleration.add(d);
   }
 
-  boolean spikeCollisionCheck(Spike spike) {
+  boolean spikeCollisionCheck(Course spike) {
     float playerLeft = position.x;
     float playerRight = position.x + size;
 
     float playerBottom = position.y + size;
 
-    float spikeLeft = spike.position.x - spike.bSize/2;
-    float spikeRight = spike.position.x + spike.bSize/2;
-    float spikeTop = spike.position.y - spike.bSize/2;
-
-    if (playerRight < spikeLeft || playerLeft > spikeRight || playerBottom < spikeTop) {
-      return false;
-    } else {
-      return true;
+    for(int i=0; i<spike.c.length; i++) {
+      if(spike.c[i] != null) {
+        float spikeLeft = spike.c[i].position.x - spike.c[i].bSize/2;
+        float spikeRight = spike.c[i].position.x + spike.c[i].bSize/2;
+        float spikeTop = spike.c[i].position.y - spike.c[i].bSize/2;
+    
+        if (playerRight < spikeLeft || playerLeft > spikeRight || playerBottom < spikeTop) {
+          return false;
+        } 
+        else {
+          return true;
+        }
+      }
     }
+    return false;
   }
 
   boolean surfCollisionCheck(Surface surf) {
@@ -98,7 +104,7 @@ class Cube extends Player {
   boolean surfDeathCheck(Surface surf) {
     for(int i=0; i<surf.bSize; i++) {
       for(int j=0; j<this.size; j++) {
-        if(this.position.x + size == surf.position.x) {
+        if(this.position.x + size >= surf.position.x && this.position.x < surf.position.x) {
           if(this.position.y + j == surf.position.y + i) {
             return true;
           }

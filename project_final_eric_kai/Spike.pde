@@ -6,8 +6,8 @@ class Spike extends Block {
   
   void display() {
 
-    float spikeHeight = bSize * 1.5; 
-    float spikeWidth = bSize * 1.5; 
+    float spikeHeight = bSize * 2.5; 
+    float spikeWidth = bSize * 2.5; 
     
     float spikeTopX = position.x - spikeWidth / 2;
     float spikeTopY = position.y - spikeHeight / 2;
