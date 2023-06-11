@@ -51,6 +51,7 @@ class Ship extends Player{
     p.addChild(mouth);
     p.addChild(seat);
     p.addChild(seat2);
+    
     return p;
   }
   
@@ -62,6 +63,10 @@ class Ship extends Player{
       noStroke();
       fill(c, i*5);
       circle(current.x - (size*0.5), current.y + (size*1.25), (size*0.45)-5);
+          
+      //reset fill and stroke for other stuff
+      fill(0);
+      stroke(225);
     }
   }
   
@@ -71,6 +76,7 @@ class Ship extends Player{
     applyForce(new PVector(0, shipGravity)); //constantly apply gravity
     
    // methods to deal with changing position
+    velocity.limit(4.75);
     velocity.add(acceleration);
     position.x += velocity.x;
     position.y += velocity.y;

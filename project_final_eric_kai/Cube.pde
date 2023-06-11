@@ -66,18 +66,16 @@ class Cube extends Player {
     PVector d = f.copy();
     acceleration.add(d);
   }
-
-  boolean spikeCollisionCheck(Course spike) {
+  
+  boolean spikeCollisionCheck(Spike spike) {
     float playerLeft = position.x;
     float playerRight = position.x + size;
 
     float playerBottom = position.y + size;
-
-    for(int i=0; i<spike.c.length; i++) {
-      if(spike.c[i] != null) {
-        float spikeLeft = spike.c[i].position.x - spike.c[i].bSize/2;
-        float spikeRight = spike.c[i].position.x + spike.c[i].bSize/2;
-        float spikeTop = spike.c[i].position.y - spike.c[i].bSize/2;
+    if(spike != null) {
+        float spikeLeft = spike.position.x - spike.bSize/2;
+        float spikeRight = spike.position.x + spike.bSize/2;
+        float spikeTop = spike.position.y - spike.bSize/2;
     
         if (playerRight < spikeLeft || playerLeft > spikeRight || playerBottom < spikeTop) {
           return false;
@@ -86,14 +84,13 @@ class Cube extends Player {
           return true;
         }
       }
-    }
-    return false;
+      return false;
   }
 
   boolean surfCollisionCheck(Surface surf) {
     for(int i=0; i<surf.bSize; i++) {
       for(int j=0; j<this.size; j++) {
-        if(this.position.x + j == surf.position.x + i) {
+        if(position.x + j == surf.position.x + i) {
           return true;
         }
       }

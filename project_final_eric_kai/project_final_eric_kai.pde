@@ -8,12 +8,13 @@ Ship s;
 Surface surf;
 Course co;
 float jumpGravity = 0.9;
-float shipGravity = 0.075;
+float shipGravity = 0.1;
 float jumpStrength = 12;
-float jetStrength = 1;
+float jetStrength = 1.5;
 float screenVelocity = 7.5;
 
 PImage img;
+PImage img2;
 
 boolean playing;
 boolean lost;
@@ -23,15 +24,18 @@ float ground = 535;
 //menu booleans
 PFont logo;
 boolean menuActive = true;
-boolean gameActive = false;
+boolean blockActive = false;
+boolean shipActive = false;
 
 
 void setup() {
   img = loadImage("geo_dash.png");
   img.resize(1000, 800);
+  img2 = loadImage("geo_dash_ship.png");
+  img2.resize(1000, 800);
   background(255);
   size(1000, 800);
-  c = new Cube(100, 535, 40);
+  c = new Cube(-100000, 535, 40);
   s = new Ship(500, 300, 50);
   //spike = new Spike(850, 560, 15);
   surf = new Surface(450, 542, 25);
@@ -39,13 +43,13 @@ void setup() {
   playing = true;
   lost = false;
   glideEnabled = false;
-  logo = createFont("Chalkboard", 50);
+  logo = createFont("Comic Sans MS", 50);
 }
 
 void draw() {
   if(menuActive) {
     frameRate(20);
-    image(img, 0, 0);
+    image(img2, 0, 0);
     fill(154, 242, 57);
     textFont(logo);
     textSize(100);
@@ -55,21 +59,22 @@ void draw() {
     fill(0); //reset fill of other stuff
   }
   
-  else if(gameActive) {
+  else if(blockActive) {
     frameRate(60);
-    image(img, 0, 0);
+    image(img2, 0, 0);
     c.run();
     surf.display();
     co.display();
     if (playing) {
-      //spike.move();
       surf.move();
       co.run();
     }
-    if (c.spikeCollisionCheck(co)) {
-      playing = false;
-      lost = true;
-      c.canJump = false;
+    for(int i=0; i<co.c.length; i++) {
+      if(c.spikeCollisionCheck(co.c[i])) {
+        playing = false;
+        lost = true;
+        c.canJump = false;
+      }
     }
     if(c.surfDeathCheck(surf) == false) { 
       if (c.surfCollisionCheck(surf)) {
@@ -79,11 +84,17 @@ void draw() {
         ground = 535;
       }
     }
-    else {
+    else if(c.surfDeathCheck(surf)) {
+      println(true);
       playing = false;
       lost = true;
       c.canJump = false;
     }
+  }
+  else if(shipActive) {
+    frameRate(60);
+    image(img2, 0, 0);
+    s.run();
   }
 
 }
@@ -100,17 +111,18 @@ void keyPressed() {
 }
 
 void mousePressed() {
-  if (c.canJump && gameActive) {
+  if (c.canJump && blockActive) {
     c.jump();
     c.canJump = false;
   }
   
-  if(gameActive) {
+  if(shipActive) {
     s.fly();
   }
   
-  if(menuActive && gameActive == false) {
+  if(menuActive && blockActive == false) { 
     menuActive = !menuActive;
-    gameActive = !gameActive;
+    //blockActive = !blockActive;
+    shipActive = !shipActive;
   }
 }

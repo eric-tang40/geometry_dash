@@ -1,6 +1,10 @@
 class Course {
   
+  //test
+  
+  
   Spike[] c;
+  //Block[] b;
   int curIndex;
   int curX;
   
