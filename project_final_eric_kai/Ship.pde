@@ -83,6 +83,12 @@ class Ship extends Player{
     position.y += velocity.y;
     p.translate(velocity.x, velocity.y);
     acceleration.mult(0);
+    
+    //ship doesn't go off screen
+    if(this.position.y < 0 || this.position.y + (size * 1.25) > height) {
+      playing = false;
+      lost = true;
+    }
   }
   
   void applyForce(PVector f) {

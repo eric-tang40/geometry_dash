@@ -140,14 +140,12 @@ void draw() {
       println("died to spike");
       playing = false;
       lost = true;
-      c.canJump = false;
     }
     if (s.surfDeathCheck(co.shipB[curBlock])) {
       println(co.shipB[curBlock].position.x);
       println("died to surf");
       playing = false;
       lost = true;
-      c.canJump = false;
     }
     if (co.shipB[curBlock] != null && c.surfDeathCheck(co.shipB[curBlock]) == false) {
       curBlock++;
