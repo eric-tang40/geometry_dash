@@ -136,7 +136,6 @@ class Course {
     addShipSurface(200, height-200, 40, 215);
     addShipSurface(0, 0, 40, 215);
     addShipPortal(2000);
-    println(curShipX);
   }
 
   void displayLevelOne() {

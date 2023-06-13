@@ -53,10 +53,25 @@ class Cube extends Player {
 
     // if the object is "jumping"
     if (position.y < ground) {
-      applyForce(new PVector(0, jumpGravity));
-      //canJump = false; 
+      applyForce(new PVector(0, jumpGravity)); 
     }
   }
+  
+  void move(float speed) {
+    display();
+    c.translate(speed, 0);
+    position.x += speed;
+    if(position.x > width) {
+      c.translate((width+50) * -1, 0);
+      position.x = -50;
+      runOnce = false;
+      ranOnce = true;
+    }
+    if(position.x > width/2 && ranOnce) {
+      runOnce = false;
+      ranOnce = false;
+    }
+  } //method only used for start screen
 
   void jump() {
     applyForce(new PVector(0, jumpStrength * -1));

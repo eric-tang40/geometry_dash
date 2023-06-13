@@ -7,7 +7,7 @@
 Spike spike;
 //end
 
-Cube c;
+Cube z, c;
 Ship s;
 Course co;
 
@@ -33,6 +33,8 @@ PFont logo;
 boolean menuActive = true;
 boolean blockActive = false;
 boolean shipActive = false;
+boolean runOnce = false;
+boolean ranOnce = true;
 
 int curBlock; //keeps track of current block being called for "Cube" course
 
@@ -50,6 +52,7 @@ void setup() {
   imgMenu.resize(1000, 800);
   background(255);
   size(1000, 800);
+  z = new Cube(100, 535, 40);
   c = new Cube(100, 535, 40);
   s = new Ship(100, 300, 35);
   co = new Course(25);
@@ -71,17 +74,20 @@ void draw() {
     }
   }
   if (menuActive) {
-    frameRate(20);
+    frameRate(60);                     
     image(imgMenu, 0, 0);
     image(imgStart, 400, 500);
-    //fill(154, 242, 57);
-    //textFont(logo);
-    //textSize(100);
-    //text("Geometry Dash", width/4-60, height/4+100);
-    //textSize(30);
-    //text("Click Anywhere to Play", width/4+120, height/2+120);
+    z.run();
+    z.move(screenVelocity); 
+    if(millis() % 17 == 0) {
+      if(runOnce == false) {
+        z.jump();
+        runOnce = true;
+      }
+    }
     fill(0); //reset fill of other stuff
-  } else if (blockActive) {
+  } 
+  else if (blockActive) {
     frameRate(60);
     image(img, 0, 0);
     c.run();
