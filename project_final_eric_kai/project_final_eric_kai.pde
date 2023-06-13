@@ -134,12 +134,14 @@ void draw() {
       //surf.move();
       //spike.move();
     }
-
-    if (s.spikeCollisionCheck(spike)) {
-      println("died to spike");
-      playing = false;
-      lost = true;
-    }
+    
+    for(int i=0; i<co.shipC.length; i++) {
+      if (s.spikeCollisionCheck(co.shipC[i])) {
+        println("died to spike");
+        playing = false;
+        lost = true;
+      }
+      }
     for (int i=0; i<co.shipB.length; i++) {
       if (s.surfDeathCheck(co.shipB[i])) {
         println("died to surf");
@@ -178,9 +180,9 @@ void mousePressed() {
   if (mouseX > 410 && mouseX < 540 && mouseY > 510 && mouseY < 640) {
     if (menuActive && blockActive == false) {
       menuActive = !menuActive;
-      //blockActive = !blockActive;
+      blockActive = !blockActive;
       c.jump();
-      shipActive = !shipActive;
+      //shipActive = !shipActive;
     }
   }
 }

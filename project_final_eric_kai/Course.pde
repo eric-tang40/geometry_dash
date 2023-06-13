@@ -7,6 +7,7 @@ class Course {
   Surface[] b;
   Portal[] p;
 
+  Spike[] shipC;
   Portal[] shipP;
   Surface[] shipB;
   int bCurIndex;
@@ -14,7 +15,6 @@ class Course {
   int pCurIndex;
   int bShipCur, cShipCur, pShipCur;
   int curX, curShipX;
-  int courseEnd;
   int spikeOffset, portalOffset, surfYOffset;
 
   Course(int num) {
@@ -24,6 +24,7 @@ class Course {
 
     shipB = new Surface[num];
     shipP = new Portal[num];
+    shipC = new Spike[num];
     
     bCurIndex = 0;
     cCurIndex = 0;
@@ -38,7 +39,6 @@ class Course {
     makeLevelOne();
     makeLevelTwo();
     portalOffset = 1000;
-    courseEnd = (num*300) + portalOffset;
   }
 
   void addSpike(int spacing) {
@@ -69,42 +69,45 @@ class Course {
   }
 
   void makeLevelOne() {
-    //addSpike(300);
-    //addSpike(300);
-    //addSpike(25);
-    //addSpike(350);
-    //addSpike(25);
-    //addSurface(10, 70, 25);
-    //addSpike(30);
-    //addSpike(30);
-    //addSurface(20, 70, 40);
-    //addSpike(30);
-    //addSpike(30);
-    //addSurface(20, 70, 60);
-    //addSpike(350);
-    //addSpike(25);
-    //addSurface(125, 150, 25);
-    //addSpike(75);
-    //addSpike(25);
-    //addSurface(30, 150, 25);
-    //addSpike(75);
-    //addSpike(25);
-    //addSurface(30, 150, 40);
+    addSpike(300);
+    addSpike(300);
+    addSpike(25);
+    addSpike(350);
+    addSpike(25);
+    addSurface(10, 70, 25);
+    addSpike(30);
+    addSpike(30);
+    addSurface(20, 70, 40);
+    addSpike(30);
+    addSpike(30);
+    addSurface(20, 70, 60);
+    addSpike(350);
+    addSpike(25);
+    addSurface(125, 150, 25);
+    addSpike(75);
+    addSpike(25);
+    addSurface(30, 150, 25);
+    addSpike(75);
+    addSpike(25);
+    addSurface(30, 150, 40);
     addPortal(200);
   }
-  void addShipSpike(int spacing) {
-    if (c[cShipCur] == null) {
-      curX += spacing;
-      c[cCurIndex] = new Spike(curX, surfYOffset, 15);
-      curX += 15;
-      cCurIndex++;
+  void addShipSpike(int spacing, int y, float size, boolean shouldRotate) {
+    if (shipC[cShipCur] == null) {
+      curShipX += spacing;
+      if(shouldRotate) {
+        size += 0.01;
+      }
+      shipC[cShipCur] = new Spike(curShipX, y, size);
+      curShipX += 15;
+      cShipCur++;
     }
   }
 
   void addShipSurface(int spacing, int varY, float sizeX, float sizeY) {
     if (shipB[bShipCur] == null) {
       curShipX += spacing;
-      shipB[bShipCur] = new Surface(spacing, varY, sizeX, sizeY);
+      shipB[bShipCur] = new Surface(curShipX, varY, sizeX, sizeY);
       curShipX += sizeX;
       bShipCur++;
     }
@@ -113,22 +116,25 @@ class Course {
   void addShipPortal(int spacing) {
     if (p[pShipCur] == null) {
       curShipX += spacing;
-      p[pShipCur] = new Portal(spacing, 325, 300, 300);
+      p[pShipCur] = new Portal(curShipX, 325, 300, 300);
       pShipCur++;
     }
   }
 
   void makeLevelTwo() {
+    int spikeXSpacing = -20;
     
-    addShipSurface(0, 0, 20000, 100); //ideally this and the line below will be last, but need to fix collisions.
+    //addShipSurface(0, 0, 20000, 100); //ideally this and the line below will be last, but need to fix collisions.
     
-    addShipSurface(0, height-100, 20000, 100);
-    addShipSurface(1500, height-200, 40, 215);
-    addShipSurface(1500, 0, 40, 215);
-    addShipSurface(2000, height-200, 40, 315);
-    addShipSurface(2000, 0, 40, 315);
-    addShipSurface(2500, height-200, 40, 215);
-    addShipSurface(2500, 0, 40, 215);
+    //addShipSurface(0, height-100, 20000, 100);
+    addShipSurface(500, height-200, 40, 215); //bottom surf
+    addShipSpike(spikeXSpacing, height-200 + spikeXSpacing + 1, 16, false); //bottom spike
+    addShipSurface(0, 0, 40, 215); //top surface
+    addShipSpike(spikeXSpacing, 215 - spikeXSpacing - 1, 16, true); //top spike
+    addShipSurface(200, height-200, 40, 315);
+    addShipSurface(0, 0, 40, 315);
+    addShipSurface(200, height-200, 40, 215);
+    addShipSurface(0, 0, 40, 215);
     addShipPortal(2000);
     println(curShipX);
   }
@@ -180,10 +186,15 @@ class Course {
 
   void runLevelTwo(Ship s) {
     for (int i=0; i<c.length; i++) {
-      //if(c[i] != null) {
-      //  c[i].displayShip();
-      //  c[i].move();
-      //}
+      if(shipC[i] != null) {
+        if(shipC[i].bSize % 1 == 0) {
+          shipC[i].display();
+        }
+        else {
+          shipC[i].display(true);
+        }
+        shipC[i].move();
+      }
       if (shipB[i] != null) {
         shipB[i].displayShip();
         shipB[i].move();
