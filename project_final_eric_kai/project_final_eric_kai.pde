@@ -10,6 +10,8 @@ Spike spike;
 Cube c;
 Ship s;
 Course co;
+
+//variables for player movement 
 float jumpGravity = 1.05;
 float shipGravity = 0.15;
 float jumpStrength = 12;
@@ -32,7 +34,7 @@ boolean menuActive = true;
 boolean blockActive = false;
 boolean shipActive = false;
 
-int curBlock;
+int curBlock; //keeps track of current block being called for "Cube" course
 
 
 void setup() {
