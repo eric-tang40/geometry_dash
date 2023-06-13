@@ -8,6 +8,7 @@ class Block {
     stroke(225);
     strokeWeight(3);
     fill(0);
+    stroke(25);
     position = new PVector(x,y);
     velocity = new PVector(0,0);
     acceleration = new PVector(0,0);

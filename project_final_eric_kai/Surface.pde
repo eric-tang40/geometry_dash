@@ -11,6 +11,10 @@ class Surface extends Block {
   }
   
   void display() {
-    rect(position.x, 579.5 - sizeY*1.5, sizeX * 1.5, sizeY * 1.5);
+    rect(position.x, 579.5 - sizeY*1.5, sizeX * 1.0, sizeY * 1.5);
+  }
+  
+  void displayShip() {
+    rect(position.x, position.y, sizeX, sizeY);
   }
 }

@@ -2,17 +2,19 @@
 //Git Commands
 //Access Repo: cd ~/5_p02_final-kai-eric
 
-//test if it works
 
+//test variables for ship
+Spike spike;
+Surface surf;
+//end 
 
 Cube c;
 Ship s;
 Course co;
-Portal portal;
 float jumpGravity = 1.05;
-float shipGravity = 0.1;
-float jumpStrength = 11;
-float jetStrength = 1.5;
+float shipGravity = 0.15;
+float jumpStrength = 12;
+float jetStrength = 3.5;
 float screenVelocity = 7.5;
 
 PImage img;
@@ -35,6 +37,8 @@ int curBlock;
 
 
 void setup() {
+  spike = new Spike(1800, 400, 100);
+  surf = new Surface(1200, 400, 250, 200);
   img = loadImage("geo_dash.png");
   img.resize(1000, 800);
   img2 = loadImage("geo_dash_ship.png");
@@ -46,9 +50,8 @@ void setup() {
   background(255);
   size(1000, 800);
   c = new Cube(100, 535, 40);
-  s = new Ship(500, 300, 50);
+  s = new Ship(100, 300, 35);
   co = new Course(20);
-  portal = new Portal(co.courseEnd*1000, 325, 300, 300);
   ground = 535;
   playing = true;
   lost = false;
@@ -58,10 +61,14 @@ void setup() {
 }
 
 void draw() {
-  if (c.position.x > portal.pX + portal.pW - 150) {
-    blockActive = false;
-    shipActive = true;
-  } // if its in the portal, turns into a ship
+  for(int q=0; q<co.p.length; q++) {
+    if(co.p[q] != null) {
+      if (c.position.x > co.p[q].pX + co.p[q].pW - 150) {
+        blockActive = false;
+        shipActive = true;
+      } // if its in the portal, turns into a ship
+    }
+  }
   if(menuActive) {
     frameRate(20);
     image(imgMenu, 0, 0);
@@ -81,8 +88,6 @@ void draw() {
     c.run();
     co.displayLevelOne();
     if (playing) {
-      portal.display();
-      portal.move();
       co.runLevelOne(c);
     }
     for(int i=0; i<co.c.length; i++) {
@@ -124,13 +129,29 @@ void draw() {
       ground = 535;
     }
   }
-  
-  
   else if(shipActive) {
     frameRate(60);
     image(img2, 0, 0);
     s.display();
-    s.run();
+    surf.displayShip();
+    spike.display();
+    if(playing) {
+      s.run();
+      surf.move();
+      spike.move();
+    }
+    if(s.spikeCollisionCheck(spike)) {
+      println("died to spike");
+      playing = false;
+      lost = true;
+      c.canJump = false;
+    }
+    if(s.surfDeathCheck(surf)) {
+      println("died to surf");
+      playing = false;
+      lost = true;
+      c.canJump = false;
+    }
   }
 
 }
@@ -139,10 +160,12 @@ void keyPressed() {
   if (key == ' ') {
     if (c.canJump) {
       c.jump();
-      c.canJump = false;
+      c.canJump = false; 
     }
-
-    s.fly();
+    
+    if(shipActive) {
+      s.fly();
+    }
   }
 }
 
@@ -158,8 +181,9 @@ void mousePressed() {
   if (mouseX > 410 && mouseX < 540 && mouseY > 510 && mouseY < 640) {
     if (menuActive && blockActive == false) {
       menuActive = !menuActive;
-       blockActive = !blockActive;
-      //shipActive = !shipActive;
+      //blockActive = !blockActive;
+      c.jump();
+      shipActive = !shipActive;
     }
   }
 }

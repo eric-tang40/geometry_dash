@@ -11,6 +11,7 @@ class Ship extends Player{
   
   PShape create() {
     PShape p = createShape(GROUP);
+    stroke(0);
     strokeWeight(4);
     fill(#FFFF00);
     PShape body = createShape(RECT, position.x, position.y, size, size);
@@ -98,5 +99,58 @@ class Ship extends Player{
   void fly() {
     applyForce(new PVector(0, jetStrength * -1));
   }
+  
+  boolean spikeCollisionCheck(Spike spike) {
+    if(spike == null) {
+      return false;
+    }
+    float playerTop = this.position.y;
+    float playerBottom = position.y + (size * 1.45);
+    float playerFront = position.x + (size * 1.20);
     
+    float spikeLeft = spike.position.x - spike.bSize/2;
+    float spikeRight = spike.position.x + spike.bSize/2;
+    float spikeTop = spike.position.y - spike.bSize;
+    float spikeBottom = spike.position.y + spike.bSize * 1.25;
+    
+    if(playerFront >= spikeLeft && position.x < spikeRight) {
+      if(playerTop > spikeBottom || playerBottom < spikeTop) {
+        return false;
+      }
+      else {
+        return true;
+      }
+    }
+    return false;
+  }
+  
+  boolean surfDeathCheck(Surface surf) {
+    if(surf == null) {
+      return false;
+    }
+    
+    float playerTop = this.position.y;
+    float playerBottom = position.y + (size * 1.65);
+    float playerFront = position.x + (size * 1.20);
+    
+    float surfLeft = surf.position.x;
+    float surfRight = surf.position.x + surf.sizeX;
+    float surfTop = surf.position.y;
+    float surfBottom = surf.position.y + (surf.sizeY);
+    
+    if(playerFront >= surfLeft && position.x < surfRight) {
+      if(playerTop > surfBottom || playerBottom < surfTop) {
+        return false;
+      }
+      else if(playerTop - 5 == surfBottom) {
+        return true;
+      }
+      else {
+        return true;
+      }
+    }
+    
+    return false;
+  }
+ 
 }

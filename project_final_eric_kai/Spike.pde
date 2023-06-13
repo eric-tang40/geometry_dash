@@ -16,7 +16,6 @@ class Spike extends Block {
 
     triangle(position.x, spikeTopY, spikeTopX, spikeBottomY, spikeBottomX, spikeBottomY);
 
-    
   }
   
 

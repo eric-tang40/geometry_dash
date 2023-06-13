@@ -5,8 +5,10 @@ class Course {
   
   Spike[] c;
   Surface[] b;
+  Portal[] p;
   int bCurIndex;
   int cCurIndex;
+  int pCurIndex;
   int curX;
   int courseEnd;
   int spikeOffset, portalOffset;
@@ -14,8 +16,10 @@ class Course {
   Course(int num) {
     c = new Spike[num];
     b = new Surface[num];
+    p = new Portal[num];
     bCurIndex = 0;
     cCurIndex = 0;
+    pCurIndex = 0;
     curX = 550;
     makeLevelOne();
     portalOffset = 1000;
@@ -40,29 +44,38 @@ class Course {
     }
   }
   
+  void addPortal(int spacing) {
+    if(p[pCurIndex] == null) {
+      curX += spacing;
+      p[pCurIndex] = new Portal(curX, 325, 300, 300);
+      curX += 300;
+      pCurIndex++;
+    }
+  }
+  
   void makeLevelOne() {
     //addSpike(300);
     //addSpike(300);
     //addSpike(25);
     //addSpike(350);
     //addSpike(25);
-    //addSurface(10, 50, 25);
-    //addSpike(40);
-    //addSurface(10, 50, 40);
-    //addSpike(40);
-    //addSurface(20, 50, 60);
+    //addSurface(10, 70, 25);
+    //addSpike(30);
+    //addSpike(30);
+    //addSurface(20, 70, 40);
+    //addSpike(30);
+    //addSpike(30);
+    //addSurface(20, 70, 60);
     //addSpike(350);
     //addSpike(25);
     //addSurface(125, 150, 25);
-    //addSpike(125);
+    //addSpike(75);
     //addSpike(25);
-    //addSurface(50, 150, 25);
-    //addSpike(125);
+    //addSurface(30, 150, 25);
+    //addSpike(75);
     //addSpike(25);
-    //addSurface(50, 150, 40);
-    addSurface(100, 50, 25);
-    addSurface(130, 50, 40);
-    addSurface(160, 50, 60);
+    //addSurface(30, 150, 40);
+    addPortal(200);
   }
   
   void displayLevelOne() {
@@ -72,6 +85,9 @@ class Course {
       }
       if(b[i] != null) {
         b[i].display();
+      }
+      if(p[i] != null) {
+        p[i].display();
       }
     }
   }
@@ -85,6 +101,10 @@ class Course {
       if(b[i] != null) {
         b[i].display();
         b[i].move();
+      }
+      if(p[i] != null) {
+        p[i].display();
+        p[i].move();
       }
     }
   }
