@@ -6,7 +6,7 @@
 //test variables for ship
 Spike spike;
 Surface surf;
-//end 
+//end
 
 Cube c;
 Ship s;
@@ -37,8 +37,9 @@ int curBlock;
 
 
 void setup() {
-  spike = new Spike(1800, 400, 100);
+  //spike = new Spike(1800, 400, 100);
   surf = new Surface(1200, 400, 250, 200);
+
   img = loadImage("geo_dash.png");
   img.resize(1000, 800);
   img2 = loadImage("geo_dash_ship.png");
@@ -51,7 +52,7 @@ void setup() {
   size(1000, 800);
   c = new Cube(100, 535, 40);
   s = new Ship(100, 300, 35);
-  co = new Course(20);
+  co = new Course(25);
   ground = 535;
   playing = true;
   lost = false;
@@ -61,15 +62,15 @@ void setup() {
 }
 
 void draw() {
-  for(int q=0; q<co.p.length; q++) {
-    if(co.p[q] != null) {
+  for (int q=0; q<co.p.length; q++) {
+    if (co.p[q] != null) {
       if (c.position.x > co.p[q].pX + co.p[q].pW - 150) {
         blockActive = false;
         shipActive = true;
       } // if its in the portal, turns into a ship
     }
   }
-  if(menuActive) {
+  if (menuActive) {
     frameRate(20);
     image(imgMenu, 0, 0);
     image(imgStart, 400, 500);
@@ -80,9 +81,7 @@ void draw() {
     //textSize(30);
     //text("Click Anywhere to Play", width/4+120, height/2+120);
     fill(0); //reset fill of other stuff
-  }
-  
-  else if(blockActive) {
+  } else if (blockActive) {
     frameRate(60);
     image(img, 0, 0);
     c.run();
@@ -90,80 +89,80 @@ void draw() {
     if (playing) {
       co.runLevelOne(c);
     }
-    for(int i=0; i<co.c.length; i++) {
-      if(c.spikeCollisionCheck(co.c[i])) {
+    for (int i=0; i<co.c.length; i++) {
+      if (c.spikeCollisionCheck(co.c[i])) {
         playing = false;
         lost = true;
         c.canJump = false;
       }
     }
-    if(co.b[curBlock] != null) {
-      if(c.position.x > co.b[curBlock].position.x + co.b[curBlock].sizeX) { 
+    if (co.b[curBlock] != null) {
+      if (c.position.x > co.b[curBlock].position.x + co.b[curBlock].sizeX) {
         curBlock++;
-      }
-      else {
-        if(c.surfDeathCheck(co.b[curBlock]) == false) {
-          if(c.position.x + c.size > co.b[curBlock].position.x && c.position.x < co.b[curBlock].position.x + co.b[curBlock].sizeX * 2) {
-            if(co.b[curBlock].sizeY == 25) {
+      } else {
+        if (c.surfDeathCheck(co.b[curBlock]) == false) {
+          if (c.position.x + c.size > co.b[curBlock].position.x && c.position.x < co.b[curBlock].position.x + co.b[curBlock].sizeX * 2) {
+            if (co.b[curBlock].sizeY == 25) {
               ground = 495;
             }
-            if(co.b[curBlock].sizeY == 40) {
+            if (co.b[curBlock].sizeY == 40) {
               ground = 470;
-            }          
-            if(co.b[curBlock].sizeY == 60) {
+            }
+            if (co.b[curBlock].sizeY == 60) {
               ground = 445;
             }
-          }
-          else {
+          } else {
             ground = 535;
           }
-        }
-        else if(c.surfDeathCheck(co.b[curBlock])) {
+        } else if (c.surfDeathCheck(co.b[curBlock])) {
           playing = false;
           lost = true;
           c.canJump = false;
         }
       }
-    }
-    else {
+    } else {
       ground = 535;
     }
-  }
-  else if(shipActive) {
+  } else if (shipActive) {
     frameRate(60);
     image(img2, 0, 0);
     s.display();
     surf.displayShip();
-    spike.display();
-    if(playing) {
+    //spike.display();
+    if (playing) {
+      co.runLevelTwo(s);
       s.run();
-      surf.move();
-      spike.move();
+      //surf.move();
+      //spike.move();
     }
-    if(s.spikeCollisionCheck(spike)) {
+
+    if (s.spikeCollisionCheck(spike)) {
       println("died to spike");
       playing = false;
       lost = true;
       c.canJump = false;
     }
-    if(s.surfDeathCheck(surf)) {
+    if (s.surfDeathCheck(co.shipB[curBlock])) {
+      println(co.shipB[curBlock].position.x);
       println("died to surf");
       playing = false;
       lost = true;
       c.canJump = false;
     }
+    if (co.shipB[curBlock] != null && c.surfDeathCheck(co.shipB[curBlock]) == false) {
+      curBlock++;
+    }
   }
-
 }
 
 void keyPressed() {
   if (key == ' ') {
     if (c.canJump) {
       c.jump();
-      c.canJump = false; 
+      c.canJump = false;
     }
-    
-    if(shipActive) {
+
+    if (shipActive) {
       s.fly();
     }
   }
