@@ -5,7 +5,6 @@
 
 //test variables for ship
 Spike spike;
-Surface surf;
 //end
 
 Cube c;
@@ -38,7 +37,6 @@ int curBlock;
 
 void setup() {
   //spike = new Spike(1800, 400, 100);
-  surf = new Surface(1200, 400, 250, 200);
 
   img = loadImage("geo_dash.png");
   img.resize(1000, 800);
@@ -127,7 +125,6 @@ void draw() {
     frameRate(60);
     image(img2, 0, 0);
     s.display();
-    surf.displayShip();
     //spike.display();
     if (playing) {
       co.runLevelTwo(s);
@@ -141,11 +138,12 @@ void draw() {
       playing = false;
       lost = true;
     }
-    if (s.surfDeathCheck(co.shipB[curBlock])) {
-      println(co.shipB[curBlock].position.x);
-      println("died to surf");
-      playing = false;
-      lost = true;
+    for (int i=0; i<co.shipB.length; i++) {
+      if (s.surfDeathCheck(co.shipB[i])) {
+        println("died to surf");
+        playing = false;
+        lost = true;
+      }
     }
     if (co.shipB[curBlock] != null && c.surfDeathCheck(co.shipB[curBlock]) == false) {
       curBlock++;
