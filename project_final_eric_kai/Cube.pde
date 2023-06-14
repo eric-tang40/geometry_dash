@@ -129,7 +129,7 @@ class Cube extends Player {
     for(int i=0; i<surf.bSize; i++) {
       for(int j=0; j<this.size; j++) {
         if(this.position.x + size >= surf.position.x && this.position.x < surf.position.x + surf.bSize) {
-            if(this.position.y + this.size/2 >= surf.position.y) {
+          if(this.position.y + this.size/2 >= surf.position.y) {
             return true;
           }
         }
@@ -137,9 +137,6 @@ class Cube extends Player {
     }
     return false;
   }
-  
-  
-  
   
   
 }

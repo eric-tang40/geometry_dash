@@ -10,11 +10,17 @@ class Course {
   Spike[] shipC;
   Portal[] shipP;
   Surface[] shipB;
+  
+  //level 3 arrays
+  Spike[] c3;
+  Surface[] b3;
+  
   int bCurIndex;
   int cCurIndex;
   int pCurIndex;
   int bShipCur, cShipCur, pShipCur;
-  int curX, curShipX;
+  int c3CurIndex, b3CurIndex;
+  int curX, curShipX, curX3;
   int spikeOffset, portalOffset, surfYOffset;
 
   Course(int num) {
@@ -25,6 +31,9 @@ class Course {
     shipB = new Surface[num];
     shipP = new Portal[num];
     shipC = new Spike[num];
+    
+    c3 = new Spike[num];
+    b3 = new Surface[num];
     
     bCurIndex = 0;
     cCurIndex = 0;
@@ -38,6 +47,7 @@ class Course {
     curShipX = 550;
     makeLevelOne();
     makeLevelTwo();
+    makeLevelThree();
     portalOffset = 1000;
   }
 
@@ -114,28 +124,85 @@ class Course {
   }
 
   void addShipPortal(int spacing) {
-    if (p[pShipCur] == null) {
-      curShipX += spacing;
-      p[pShipCur] = new Portal(curShipX, 325, 300, 300);
-      pShipCur++;
+      if (shipP[pShipCur] == null) {
+        curShipX += spacing;
+        shipP[pShipCur] = new Portal(curShipX, 255, 300, 300);
+        curShipX += 300;
+        pShipCur++;
+      }
     }
-  }
 
-  void makeLevelTwo() {
-    int spikeXSpacing = -20;
-    
+void makeLevelTwo() {
+    int spikeXSpacing = 20;
+
     //addShipSurface(0, 0, 20000, 100); //ideally this and the line below will be last, but need to fix collisions.
-    
+
     //addShipSurface(0, height-100, 20000, 100);
+    addShipSpike(300-spikeXSpacing, height - spikeXSpacing, 16, false);
+    addShipSpike(-spikeXSpacing, spikeXSpacing, 16, true);
+    addShipSpike(-spikeXSpacing*3, height - spikeXSpacing, 16, false);
+    addShipSpike(-spikeXSpacing, spikeXSpacing, 16, true);
+    addShipSpike(-spikeXSpacing*3, height - spikeXSpacing, 16, false);
+    addShipSpike(-spikeXSpacing, spikeXSpacing, 16, true);
+    addShipSpike(-spikeXSpacing*3, height - spikeXSpacing, 16, false);
+    addShipSpike(-spikeXSpacing, spikeXSpacing, 16, true);
+    addShipSpike(-spikeXSpacing*3, height - spikeXSpacing, 16, false);
+    addShipSpike(-spikeXSpacing, spikeXSpacing, 16, true);
+    addShipSpike(-spikeXSpacing*3, height - spikeXSpacing, 16, false);
+    addShipSpike(-spikeXSpacing, spikeXSpacing, 16, true);
+    addShipSpike(-spikeXSpacing*3, height - spikeXSpacing, 16, false);
+    addShipSpike(-spikeXSpacing, spikeXSpacing, 16, true);
+    addShipSpike(-spikeXSpacing*3, height - spikeXSpacing, 16, false);
+    addShipSpike(-spikeXSpacing, spikeXSpacing, 16, true);
+    addShipSpike(-spikeXSpacing*3, height - spikeXSpacing, 16, false);
+    addShipSpike(-spikeXSpacing, spikeXSpacing, 16, true);
+    addShipSpike(-spikeXSpacing, spikeXSpacing, 16, true);
+    addShipSpike(-spikeXSpacing, spikeXSpacing, 16, true);
+    addShipSpike(-spikeXSpacing*3, spikeXSpacing, 16, true);
+   
+
     addShipSurface(500, height-200, 40, 215); //bottom surf
-    addShipSpike(spikeXSpacing, height-200 + spikeXSpacing + 1, 16, false); //bottom spike
+    addShipSpike(-spikeXSpacing, height-200 - spikeXSpacing + 1, 16, false); //bottom spike
     addShipSurface(0, 0, 40, 215); //top surface
-    addShipSpike(spikeXSpacing, 215 - spikeXSpacing - 1, 16, true); //top spike
+    addShipSpike(-spikeXSpacing, 215 + spikeXSpacing - 1, 16, true); //top spike
+   
     addShipSurface(200, height-200, 40, 315);
-    addShipSurface(0, 0, 40, 315);
-    addShipSurface(200, height-200, 40, 215);
+    addShipSpike(-spikeXSpacing, height-200 - spikeXSpacing + 1, 16, false); //bottom spike
     addShipSurface(0, 0, 40, 215);
-    addShipPortal(2000);
+    addShipSpike(-spikeXSpacing, 215 + spikeXSpacing - 1, 16, true); //top spike
+   
+    addShipSurface(200, height-250, 40, 265);
+    addShipSpike(-spikeXSpacing, height-250 - spikeXSpacing + 1, 16, false); //bottom spike
+    addShipSurface(0, 0, 40, 265);
+    addShipSpike(-spikeXSpacing, 265 + spikeXSpacing - 1, 16, true); //top spike
+    
+    //addShipSurface(200, height-250, 40, 315);
+    //addShipSpike(-spikeXSpacing, height-250 - spikeXSpacing + 1, 16, false); //bottom spike
+    //addShipSurface(0, 0, 40, 315);
+    //addShipSpike(-spikeXSpacing, 315 + spikeXSpacing - 1, 16, true); //top spike
+    
+    addShipSurface(200, height-250, 40, 265);
+    addShipSpike(-spikeXSpacing, height-250 - spikeXSpacing + 1, 16, false); //bottom spike
+    addShipSurface(0, 0, 40, 265);
+    addShipSpike(-spikeXSpacing, 265 + spikeXSpacing - 1, 16, true); //top spike
+    
+    addShipSurface(200, height-200, 40, 315);
+    addShipSpike(-spikeXSpacing, height-200 - spikeXSpacing + 1, 16, false); //bottom spike
+    addShipSurface(0, 0, 40, 215);
+    addShipSpike(-spikeXSpacing, 215 + spikeXSpacing - 1, 16, true); //top spike
+    
+    addShipSurface(300, height-200, 40, 215); //bottom surf
+    addShipSpike(-spikeXSpacing, height-200 - spikeXSpacing + 1, 16, false); //bottom spike
+    addShipSurface(0, 0, 40, 215); //top surface
+    addShipSpike(-spikeXSpacing, 215 + spikeXSpacing - 1, 16, true); //top spike
+    addShipSurface(-spikeXSpacing, height-200, 40, 215); //bottom surf
+    addShipSpike(-spikeXSpacing, height-200 - spikeXSpacing + 1, 16, false); //bottom spike
+    addShipSurface(0, 0, 40, 215); //top surface
+    addShipSpike(-spikeXSpacing, 215 + spikeXSpacing - 1, 16, true); //top spike
+    
+    addShipSurface(300,0,2000,300);
+    addShipSurface(-2000,height-300,2000,300);
+    addShipPortal(-1800);
   }
 
   void displayLevelOne() {
@@ -171,9 +238,9 @@ class Course {
 
   void displayLevelTwo() {
     for (int i=0; i<b.length; i++) {
-      //if(c[i] != null) {
-      //  c[i].display();
-      //}
+      if(c[i] != null) {
+        c[i].display();
+      }
       if (shipB[i] != null) {
         shipB[i].displayShip();
       }
@@ -201,6 +268,83 @@ class Course {
       if (shipP[i] != null) {
         shipP[i].display();
         shipP[i].move();
+      }
+    }
+  }
+  
+  void addSpike3(int spacing) {
+    if (c3[c3CurIndex] == null) {
+      curX3 += spacing;
+      c3[c3CurIndex] = new Spike(curX3, 560, 15);
+      curX3 += 15;
+      c3CurIndex++;
+    }
+  }
+  
+  void addSpike3(int spacing, int y) {
+    if (c3[c3CurIndex] == null) {
+      curX3 += spacing;
+      c3[c3CurIndex] = new Spike(curX3, y, 15);
+      curX3 += 15;
+      c3CurIndex++;
+    }
+  }
+    
+  void addSurface3(int spacing, float sizeX, float sizeY) {
+    if (b3[b3CurIndex] == null) {
+      curX3 += spacing;
+      b3[b3CurIndex] = new Surface(curX3, 542, sizeX, sizeY);
+      curX3 += sizeX;
+      b3CurIndex++;
+    }
+  }
+  
+  void makeLevelThree() {
+    //addSpike3(550);
+    //addSpike3(275);
+    //addSpike3(25);
+    //addSpike3(275);
+    //addSpike3(20);
+    //addSpike3(20);
+    addSurface3(800, 70, 25);
+    addSurface3(115, 70, 50);
+    addSpike3(-50, 535);
+    addSurface3(130, 70, 75);
+    addSpike3(-50, 495);
+    addSurface3(130, 70, 100);
+    addSpike3(-50, 470);
+    addSurface3(130, 70, 125);
+    addSpike3(-50, 450);
+    addSurface3(70, 70, 100);
+    addSurface3(70, 70, 75);
+    addSurface3(70, 70, 50);
+    addSurface3(70, 70, 25);
+  }
+  
+  void displayLevelThree() {
+    for (int i=0; i<b.length; i++) {
+      if(c3[i] != null) {
+        if(c3[i].position.y == 560) {
+          c3[i].display();
+        }
+      }
+      if (b3[i] != null) {
+        b3[i].displayFloat();
+      }
+    }
+  }
+  
+  void runLevelThree() {
+    for (int i=0; i<c.length; i++) {
+      if(c3[i] != null) {
+        if(c3[i].position.y == 560) {
+          c3[i].display();
+        }
+        c3[i].move();
+      }
+      if (b3[i] != null) {
+        b3[i].displayFloat();
+        b3[i].move();
       }
     }
   }

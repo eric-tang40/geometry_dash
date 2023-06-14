@@ -5,7 +5,7 @@ class Spike extends Block {
   }
   
   void display() {
-
+    stroke(225);
     float spikeHeight = bSize * 2.5; 
     float spikeWidth = bSize * 2.5; 
     

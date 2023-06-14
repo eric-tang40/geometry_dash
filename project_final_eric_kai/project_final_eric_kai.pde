@@ -2,11 +2,6 @@
 //Git Commands
 //Access Repo: cd ~/5_p02_final-kai-eric
 
-
-//test variables for ship
-Spike spike;
-//end
-
 Cube z, c;
 Ship s;
 Course co;
@@ -22,6 +17,8 @@ PImage img;
 PImage img2;
 PImage imgMenu;
 PImage imgStart;
+PImage title;
+PImage gameOver;
 
 boolean playing;
 boolean lost;
@@ -33,6 +30,7 @@ PFont logo;
 boolean menuActive = true;
 boolean blockActive = false;
 boolean shipActive = false;
+boolean finalActive = false;
 boolean runOnce = false;
 boolean ranOnce = true;
 
@@ -40,8 +38,7 @@ int curBlock; //keeps track of current block being called for "Cube" course
 
 
 void setup() {
-  //spike = new Spike(1800, 400, 100);
-
+  stroke(0);
   img = loadImage("geo_dash.png");
   img.resize(1000, 800);
   img2 = loadImage("geo_dash_ship.png");
@@ -50,12 +47,16 @@ void setup() {
   imgStart.resize(150, 150);
   imgMenu = loadImage("geoDashMenu.png");
   imgMenu.resize(1000, 800);
+  title = loadImage("geoDashLogo.png");
+  title.resize(800,100);
+  gameOver = loadImage("gameOver.jpeg");
+  gameOver.resize(1000, 800);
   background(255);
   size(1000, 800);
   z = new Cube(100, 535, 40);
   c = new Cube(100, 535, 40);
   s = new Ship(100, 300, 35);
-  co = new Course(25);
+  co = new Course(60);
   ground = 535;
   playing = true;
   lost = false;
@@ -75,8 +76,9 @@ void draw() {
   }
   if (menuActive) {
     frameRate(60);                     
-    image(imgMenu, 0, 0);
-    image(imgStart, 400, 500);
+    image(img, 0, 0);
+    image(title, 125, 100);
+    image(imgStart, 400, 300);
     z.run();
     z.move(screenVelocity); 
     if(millis() % 17 == 0) {
@@ -105,7 +107,8 @@ void draw() {
     if (co.b[curBlock] != null) {
       if (c.position.x > co.b[curBlock].position.x + co.b[curBlock].sizeX) {
         curBlock++;
-      } else {
+      } 
+      else {
         if (c.surfDeathCheck(co.b[curBlock]) == false) {
           if (c.position.x + c.size > co.b[curBlock].position.x && c.position.x < co.b[curBlock].position.x + co.b[curBlock].sizeX * 2) {
             if (co.b[curBlock].sizeY == 25) {
@@ -126,19 +129,27 @@ void draw() {
           c.canJump = false;
         }
       }
-    } else {
+    } 
+    else {
       ground = 535;
     }
-  } else if (shipActive) {
+  } 
+  else if (shipActive) {
     frameRate(60);
+    for (int i=0; i<co.p.length; i++) {
+      if (co.shipP[i] != null) {
+        if (s.position.x > co.shipP[i].pX + co.p[i].pW - 150) {
+          shipActive = false;
+          finalActive = true;
+        } 
+      }
+    }
     image(img2, 0, 0);
     s.display();
-    //spike.display();
+    co.displayLevelTwo();
     if (playing) {
       co.runLevelTwo(s);
       s.run();
-      //surf.move();
-      //spike.move();
     }
     
     for(int i=0; i<co.shipC.length; i++) {
@@ -159,6 +170,78 @@ void draw() {
       curBlock++;
     }
   }
+  else if(finalActive) {
+    frameRate(60);
+    image(img, 0, 0);
+    c.display();
+    co.displayLevelThree();
+    if(playing) {
+      c.run();
+      co.runLevelThree();
+    }
+    for (int i=0; i<co.c3.length; i++) {
+      if (c.spikeCollisionCheck(co.c3[i])) {
+        playing = false;
+        lost = true;
+        c.canJump = false;
+      }
+    }
+    if (co.b3[curBlock] != null) {
+      if (c.position.x > co.b3[curBlock].position.x + co.b3[curBlock].sizeX) {
+        curBlock++;
+      } 
+      else {
+        if (c.surfDeathCheck(co.b3[curBlock]) == false) {
+          if (c.position.x + c.size > co.b3[curBlock].position.x && c.position.x < co.b3[curBlock].position.x + co.b3[curBlock].sizeX * 2) {
+            if (co.b3[curBlock].sizeY == 25) {
+              ground = 497;
+            }
+            if (co.b3[curBlock].sizeY == 50) {
+              ground = 460;
+            }
+            if (co.b3[curBlock].sizeY == 75) {
+              ground = 423;
+            }
+            if (co.b3[curBlock].sizeY == 100) {
+              ground = 385;
+            }
+            if (co.b3[curBlock].sizeY == 125) {
+              ground = 351;
+            }
+          } 
+          else {
+            ground = 535;
+          }
+        } 
+        else if (c.surfDeathCheck(co.b3[curBlock])) {
+          playing = false;
+          lost = true;
+          c.canJump = false;
+        }
+      }
+    } 
+    else {
+      ground = 535;
+    }  
+  }
+  if (lost) {
+    image(gameOver, 0, 0);
+
+    fill(255);
+    textSize(50);
+    text("Press Spacebar to Play Again", width/5+10, height/2+350);
+  }
+}
+
+void reset() {
+  menuActive = true;
+  blockActive = false;
+  shipActive = false;
+  finalActive = false;
+  runOnce = false;
+  ranOnce = true;
+  lost = false;
+  setup();
 }
 
 void keyPressed() {
@@ -170,6 +253,9 @@ void keyPressed() {
 
     if (shipActive) {
       s.fly();
+    }
+    if (lost) {
+      reset();
     }
   }
 }
@@ -183,12 +269,14 @@ void mousePressed() {
   if (shipActive) {
     s.fly();
   }
-  if (mouseX > 410 && mouseX < 540 && mouseY > 510 && mouseY < 640) {
+  if (mouseX > 410 && mouseX < 540 && mouseY > 310 && mouseY < 440) {
     if (menuActive && blockActive == false) {
+      curBlock = 0;
       menuActive = !menuActive;
       blockActive = !blockActive;
       c.jump();
       //shipActive = !shipActive;
+      //finalActive = !finalActive;
     }
   }
 }

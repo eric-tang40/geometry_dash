@@ -17,4 +17,8 @@ class Surface extends Block {
   void displayShip() {
     rect(position.x, position.y, sizeX, sizeY);
   }
+  
+  void displayFloat() {
+    rect(position.x, 579.5 - sizeY*1.5, sizeX * 1.0, 10);
+  }
 }
