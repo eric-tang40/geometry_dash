@@ -93,7 +93,7 @@ class Course {
     addSurface(20, 70, 60);
     addSpike(350);
     addSpike(25);
-    addSurface(125, 150, 25);
+    addSurface(150, 150, 25);
     addSpike(75);
     addSpike(25);
     addSurface(30, 150, 25);
@@ -306,7 +306,7 @@ void makeLevelTwo() {
     //addSpike3(275);
     //addSpike3(20);
     //addSpike3(20);
-    addSurface3(800, 70, 25);
+    addSurface3(1200, 70, 25);
     addSurface3(115, 70, 50);
     addSpike3(-50, 535);
     addSurface3(130, 70, 75);
