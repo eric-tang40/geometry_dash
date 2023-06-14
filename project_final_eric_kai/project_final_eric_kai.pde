@@ -6,7 +6,11 @@ Cube z, c;
 Ship s;
 Course co;
 
-//variables for player movement 
+
+int dwX;
+int dwY;
+int attempts;
+//variables for player movement
 float jumpGravity = 1.05;
 float shipGravity = 0.15;
 float jumpStrength = 12;
@@ -19,9 +23,12 @@ PImage imgMenu;
 PImage imgStart;
 PImage title;
 PImage gameOver;
+PImage dw;
+PImage win;
 
 boolean playing;
 boolean lost;
+boolean won = false;
 boolean glideEnabled;
 float ground;
 
@@ -48,9 +55,13 @@ void setup() {
   imgMenu = loadImage("geoDashMenu.png");
   imgMenu.resize(1000, 800);
   title = loadImage("geoDashLogo.png");
-  title.resize(800,100);
+  title.resize(800, 100);
   gameOver = loadImage("gameOver.jpeg");
   gameOver.resize(1000, 800);
+  dw = loadImage("dw.png");
+  dw.resize(50, 50);
+  win = loadImage("win.png");
+  win.resize(1000, 800);
   background(255);
   size(1000, 800);
   z = new Cube(100, 535, 40);
@@ -63,39 +74,43 @@ void setup() {
   glideEnabled = false;
   curBlock = 0;
   logo = createFont("Comic Sans MS", 50);
+  dwX = -1275;
+  dwY = -2000;
 }
 
 void draw() {
-  for (int q=0; q<co.p.length; q++) {
-    if (co.p[q] != null) {
-      if (c.position.x > co.p[q].pX + co.p[q].pW - 150) {
-        blockActive = false;
-        shipActive = true;
-      } // if its in the portal, turns into a ship
-    }
-  }
   if (menuActive) {
-    frameRate(60);                     
+    frameRate(60);
     image(img, 0, 0);
     image(title, 125, 100);
     image(imgStart, 400, 300);
+    fill(255);
+    textSize(40);
+    text("ATTEMPTS: " + attempts, 380, 275);
     z.run();
-    z.move(screenVelocity); 
-    if(millis() % 17 == 0) {
-      if(runOnce == false) {
+    z.move(screenVelocity);
+    if (millis() % 17 == 0) {
+      if (runOnce == false) {
         z.jump();
         runOnce = true;
       }
     }
     fill(0); //reset fill of other stuff
-  } 
-  else if (blockActive) {
+  } else if (blockActive) {
     frameRate(60);
     image(img, 0, 0);
     c.run();
     co.displayLevelOne();
     if (playing) {
       co.runLevelOne(c);
+    }
+    for (int q=0; q<co.p.length; q++) {
+      if (co.p[q] != null) {
+        if (c.position.x > co.p[q].pX + co.p[q].pW - 150) {
+          blockActive = false;
+          shipActive = true;
+        } // if its in the portal, turns into a ship
+      }
     }
     for (int i=0; i<co.c.length; i++) {
       if (c.spikeCollisionCheck(co.c[i])) {
@@ -107,8 +122,7 @@ void draw() {
     if (co.b[curBlock] != null) {
       if (c.position.x > co.b[curBlock].position.x + co.b[curBlock].sizeX) {
         curBlock++;
-      } 
-      else {
+      } else {
         if (c.surfDeathCheck(co.b[curBlock]) == false) {
           if (c.position.x + c.size > co.b[curBlock].position.x && c.position.x < co.b[curBlock].position.x + co.b[curBlock].sizeX * 2) {
             if (co.b[curBlock].sizeY == 25) {
@@ -129,19 +143,18 @@ void draw() {
           c.canJump = false;
         }
       }
-    } 
-    else {
+    } else {
       ground = 535;
     }
-  } 
-  else if (shipActive) {
+  } else if (shipActive) {
     frameRate(60);
-    for (int i=0; i<co.p.length; i++) {
-      if (co.shipP[i] != null) {
-        if (s.position.x > co.shipP[i].pX + co.p[i].pW - 150) {
+    for (int i=0; i<co.shipP.length; i++) {
+      if (co.shipP[0] != null) {
+        if (s.position.x > co.shipP[0].pX + co.shipP[0].pW - 150) {
+          curBlock = 0;
           shipActive = false;
           finalActive = true;
-        } 
+        }
       }
     }
     image(img2, 0, 0);
@@ -151,33 +164,33 @@ void draw() {
       co.runLevelTwo(s);
       s.run();
     }
-    
-    for(int i=0; i<co.shipC.length; i++) {
+
+    for (int i=0; i<co.shipC.length; i++) {
       if (s.spikeCollisionCheck(co.shipC[i])) {
-        println("died to spike");
         playing = false;
         lost = true;
       }
-      }
+    }
     for (int i=0; i<co.shipB.length; i++) {
       if (s.surfDeathCheck(co.shipB[i])) {
-        println("died to surf");
         playing = false;
         lost = true;
       }
     }
-    if (co.shipB[curBlock] != null && c.surfDeathCheck(co.shipB[curBlock]) == false) {
-      curBlock++;
-    }
-  }
-  else if(finalActive) {
+  } else if (finalActive) {
     frameRate(60);
     image(img, 0, 0);
-    c.display();
+    c.run();
     co.displayLevelThree();
-    if(playing) {
-      c.run();
-      co.runLevelThree();
+    if (playing) {
+      co.runLevelThree(c);
+    }
+    for (int q=0; q<co.p3.length; q++) {
+      if (co.p3[q] != null) {
+        if (c.position.x > co.p3[q].pX + co.p3[q].pW - 150) {
+          won = true;
+        } // if its in the portal, turns into a ship
+      }
     }
     for (int i=0; i<co.c3.length; i++) {
       if (c.spikeCollisionCheck(co.c3[i])) {
@@ -189,8 +202,7 @@ void draw() {
     if (co.b3[curBlock] != null) {
       if (c.position.x > co.b3[curBlock].position.x + co.b3[curBlock].sizeX) {
         curBlock++;
-      } 
-      else {
+      } else {
         if (c.surfDeathCheck(co.b3[curBlock]) == false) {
           if (c.position.x + c.size > co.b3[curBlock].position.x && c.position.x < co.b3[curBlock].position.x + co.b3[curBlock].sizeX * 2) {
             if (co.b3[curBlock].sizeY == 25) {
@@ -208,21 +220,18 @@ void draw() {
             if (co.b3[curBlock].sizeY == 125) {
               ground = 351;
             }
-          } 
-          else {
+          } else {
             ground = 535;
           }
-        } 
-        else if (c.surfDeathCheck(co.b3[curBlock])) {
+        } else if (c.surfDeathCheck(co.b3[curBlock])) {
           playing = false;
           lost = true;
           c.canJump = false;
         }
       }
-    } 
-    else {
+    } else {
       ground = 535;
-    }  
+    }
   }
   if (lost) {
     image(gameOver, 0, 0);
@@ -230,6 +239,13 @@ void draw() {
     fill(255);
     textSize(50);
     text("Press Spacebar to Play Again", width/5+10, height/2+350);
+  }
+  if (won) {
+    c.jumpEnd();
+    image(dw, dwX, 560, 100, 100);
+    dwX+=15;
+    image(dw, 500, dwY, 100, 100);
+    dwY += 15;
   }
 }
 
@@ -241,6 +257,7 @@ void reset() {
   runOnce = false;
   ranOnce = true;
   lost = false;
+  won = false;
   setup();
 }
 
@@ -256,6 +273,11 @@ void keyPressed() {
     }
     if (lost) {
       reset();
+      attempts++;
+    }
+    if(won) {
+      reset();
+      attempts = 0;
     }
   }
 }

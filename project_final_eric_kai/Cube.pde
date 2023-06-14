@@ -2,6 +2,7 @@ class Cube extends Player {
 
   PShape c;
   boolean canJump;
+  boolean hasImage;
 
   Cube(int x, int y, float s) {
     super(x, y, s);
@@ -33,6 +34,9 @@ class Cube extends Player {
 
   void display() {
     shape(c);
+    if(hasImage) {
+      image(dw, position.x, position.y);
+    }
   } //method to display
 
   void run() {
@@ -55,6 +59,19 @@ class Cube extends Player {
     if (position.y < ground) {
       applyForce(new PVector(0, jumpGravity)); 
     }
+    
+    if(position.x > 150 && menuActive == false) {
+      fill(23, 245, 255);
+      noStroke();
+      rect(width-25, 0, 50, height-220);
+    }
+    
+    if(position.x > width && menuActive == false) {
+      image(win, 0, 0);
+      fill(255);
+      textSize(50);
+      text("Press Spacebar to Play Again", width/5+10, height/2+350);
+    }
   }
   
   void move(float speed) {
@@ -75,6 +92,10 @@ class Cube extends Player {
 
   void jump() {
     applyForce(new PVector(0, jumpStrength * -1));
+  }
+  
+  void jumpEnd() {
+    applyForce(new PVector(1, -1.5));
   }
 
   void applyForce(PVector f) {
